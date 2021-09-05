@@ -10,6 +10,7 @@ env:
   CODACY_PROJECT_NAME: "bodleian"
   CODACY_ORGANIZATION_PROVIDER: "gh"
   CODACY_USERNAME: "${{ github.repository_owner }}"
+  MAVEN_OPTS: --no-transfer-progress
 
 jobs:
     build-container:
@@ -39,10 +40,14 @@ jobs:
               mvn jib:build \
                   -Djib.to.image=${IMAGE_NAME} \
                   -Djib.container.labels=${CONTAINER_LABELS} \
-                  -Djib.container.ports=8080
+                  -Djib.container.ports=8080 \
+                  -Djib.to.auth.username=${DOCKER_REGISTRY_USERNAME}
+                  -Djib.to.auth.password=${DOCKER_REGISTRY_PASSWORD}
             env:
               IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
               CONTAINER_LABELS: "org.opencontainers.image.revision=${{ github.sha }},org.opencontainers.image.created=${{ steps.date.outputs.now }}"
+              DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+              DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
     deploy:
       needs:
