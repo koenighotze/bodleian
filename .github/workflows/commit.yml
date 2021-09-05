@@ -1,0 +1,20 @@
+name: Commit
+
+on:
+    push:
+    workflow_dispatch:
+
+jobs:
+    build:
+      runs-on: ubuntu-20.04
+
+      steps:
+          - name: Checking out
+            uses: actions/checkout@v2
+
+          - name: Linting
+            run: mvn detekt:check
+
+          - name: Running unit tests
+            run: mvn -DexcludedGroups="integration" test
+            
