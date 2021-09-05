@@ -40,7 +40,7 @@ jobs:
                   -Djib.to.image=${IMAGE_NAME} \
                   -Djib.container.labels=${CONTAINER_LABELS} \
                   -Djib.container.ports=8080 \
-                  -Djib.to.auth.username=${DOCKER_REGISTRY_USERNAME}
+                  -Djib.to.auth.username=${DOCKER_REGISTRY_USERNAME} \
                   -Djib.to.auth.password=${DOCKER_REGISTRY_PASSWORD}
             env:
               IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
