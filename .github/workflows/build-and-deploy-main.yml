@@ -10,7 +10,6 @@ env:
   CODACY_PROJECT_NAME: "bodleian"
   CODACY_ORGANIZATION_PROVIDER: "gh"
   CODACY_USERNAME: "${{ github.repository_owner }}"
-  MAVEN_OPTS: --no-transfer-progress
 
 jobs:
     build-container:
