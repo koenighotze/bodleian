@@ -6,21 +6,17 @@ import java.util.*
 
 @RestController
 @RequestMapping("/books")
-class Books {
-    val books = mutableListOf(
-        Book(UUID.randomUUID().toString(), "The Lord of The Rings", "J.R.R. Tolkien", "Todo")
-    )
-
+class Books(val repo: BooksRepository) {
     @GetMapping
-    fun allBooks() = books
+    fun allBooks(): List<Book> = repo.findAll()
 
     // TODO return 404 on Nil
     @GetMapping("/{id}")
-    fun book(@PathVariable id: String) = books.find { it.id == id }
+    fun book(@PathVariable id: String) = repo.findById(id)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: String) = books.removeIf { it.id == id }
+    fun delete(@PathVariable id: String) = repo.deleteById(id)
 
     @PostMapping("/{id}")
-    fun add(@PathVariable id: String, @RequestBody book: Book) = books.add(book.copy(id = id))
+    fun add(@PathVariable id: String, @RequestBody book: Book) = repo.save(book.copy(id = id))
 }

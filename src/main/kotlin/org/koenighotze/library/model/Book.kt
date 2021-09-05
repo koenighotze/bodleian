@@ -1,4 +1,8 @@
 package org.koenighotze.library.model
 
-data class Book(val id: String?, val title: String, val author: String, val isbn: String?){
+import javax.persistence.Entity
+import javax.persistence.Id
+
+@Entity
+data class Book(@Id val id: String?, val title: String, val author: String, val isbn: String?){
 }

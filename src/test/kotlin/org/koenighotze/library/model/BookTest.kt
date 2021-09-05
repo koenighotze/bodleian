@@ -11,10 +11,10 @@ class BookTest {
     @DisplayName("when constructing")
     inner class WhenConstructing {
         @Test
-        fun `should allow the id to be optional`() {
-            val book = Book(id = null, title = "foo", author = "bar", isbn = "qux")
+        fun `should allow the isbn to be optional`() {
+            val book = Book(id = "123", title = "foo", author = "bar", isbn = null)
 
-            assertNull(book.id)
+            assertNull(book.isbn)
         }
     }
 }

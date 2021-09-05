@@ -8,15 +8,27 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
+import java.util.*
 
 @SpringBootTest(
     classes = [ LibraryApplication::class ],
     webEnvironment = RANDOM_PORT
 )
 @DisplayName("The Books REST endpoint")
-class BooksIT(@Autowired val template: TestRestTemplate) {
+class BooksIT(@Autowired val template: TestRestTemplate, @Autowired val repo: BooksRepository) {
+    @BeforeEach
+    fun populateDb() {
+        repo.saveAll(WellKnownBooks.books)
+    }
+
+    @AfterEach
+    fun cleanUpDb() {
+        repo.deleteAll()
+    }
+
     @Nested
     @DisplayName("when GET-ing a book")
     inner class Get {
@@ -25,18 +37,25 @@ class BooksIT(@Autowired val template: TestRestTemplate) {
         inner class Ok {
             @Test
             fun `it should return the book's data`() {
-                val response = template.getForEntity("/books/123", Book::class.java)
+                val wellKnownId = WellKnownBooks.books[0].id
+                val response = template.getForEntity("/books/$wellKnownId", Book::class.java)
 
                 assertAll("the HTTP Response",
                     { assertEquals(OK, response.statusCode) },
-                    { assertEquals(Book("", "", "", ""), response.body) }
+                    { assertEquals(WellKnownBooks.books[0], response.body) }
                 )
             }
         }
 
+        @Nested
+        @DisplayName("and the book is not found")
+        inner class Nok {
+            @Test
+            fun `it should return 404`() {
+                val response = template.getForEntity("/books/not_there", Book::class.java)
 
-        @Test
-        fun `it should return the book's data`() {
+                assertEquals(NOT_FOUND, response.statusCode)
+            }
         }
     }
 }
