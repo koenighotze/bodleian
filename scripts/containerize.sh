@@ -10,7 +10,7 @@ set -Eeuo pipefail
 : "${CONTAINER_PORTS:=8080}"
 
 NOW=$(date -u +%Y-%m-%dT%T%z)
-CONTAINER_LABELS="org.opencontainers.image.revision=${GIT_SHA},org.opencontainers.image.created=${NOW}"
+CONTAINER_LABELS="org.opencontainers.image.revision=${GITHUB_SHA},org.opencontainers.image.created=${NOW}"
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
