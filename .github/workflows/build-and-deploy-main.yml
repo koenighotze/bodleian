@@ -6,11 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  CODACY_PROJECT_NAME: "bodleian"
-  CODACY_ORGANIZATION_PROVIDER: "gh"
-  CODACY_USERNAME: "${{ github.repository_owner }}"
-
 jobs:
     build-container:
       runs-on: ubuntu-20.04
@@ -29,31 +24,35 @@ jobs:
             with:
               api-token: ${{ secrets.CODACY_API_TOKEN }}
               coverage-reports: ./target/site/jacoco/jacoco.xml
+            env:
+              CODACY_PROJECT_NAME: "bodleian"
+              CODACY_ORGANIZATION_PROVIDER: "gh"
+              CODACY_USERNAME: "${{ github.repository_owner }}"
 
-          - name: Getting current date
-            id: date
-            run: echo "::set-output name=now::$(date -u +'%Y-%m-%dT%T%z')"
+#          - name: Getting current date
+#            id: date
+#            run: echo "::set-output name=now::$(date -u +'%Y-%m-%dT%T%z')"
 
-          - name: Getting tag
-            id: tag
-            run: |
-              tag_name=${GITHUB_REF/refs\/tags\/}
-              tag_name=${tag_name/refs\/heads\/main}
-              echo "::set-output name=name::${tag_name:=latest}"
+#          - name: Getting tag
+#            id: tag
+#            run: |
+#              tag_name=${GITHUB_REF/refs\/tags\/}
+#              tag_name=${tag_name/refs\/heads\/main}
+#              echo "::set-output name=name::${tag_name:=latest}"
 
           - name: Containerizing
-            run: |
-              mvn jib:build \
-                  -Djib.to.image="${IMAGE_NAME}" \
-                  -Djib.container.labels="${CONTAINER_LABELS}" \
-                  -Djib.to.tags="${CONTAINER_TAGS}" \
-                  -Djib.container.ports=8080 \
-                  -Djib.to.auth.username="${DOCKER_REGISTRY_USERNAME}" \
-                  -Djib.to.auth.password="${DOCKER_REGISTRY_PASSWORD}"
+            run: ./scripts/containerize.sh
+#              mvn jib:build \
+#                  -Djib.to.image="${IMAGE_NAME}" \
+#                  -Djib.container.labels="${CONTAINER_LABELS}" \
+#                  -Djib.to.tags="${CONTAINER_TAGS}" \
+#                  -Djib.container.ports=8080 \
+#                  -Djib.to.auth.username="${DOCKER_REGISTRY_USERNAME}" \
+#                  -Djib.to.auth.password="${DOCKER_REGISTRY_PASSWORD}"
             env:
               IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
-              CONTAINER_LABELS: "org.opencontainers.image.revision=${{ github.sha }},org.opencontainers.image.created=${{ steps.date.outputs.now }}"
-              CONTAINER_TAGS: "${{ steps.tag.outputs.name }}"
+#              CONTAINER_LABELS: "org.opencontainers.image.revision=${{ github.sha }},org.opencontainers.image.created=${{ steps.date.outputs.now }}"
+#              CONTAINER_TAGS: "${{ steps.tag.outputs.name }}"
               DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
               DOCKER_REGISTRY_PASSWORD: "${{ secrets.DOCKER_REGISTRY_PASSWORD }}"
 
