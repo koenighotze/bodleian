@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>EmptyClassBlock:Book.kt$Book${ }</ID>
+    <ID>EmptyClassBlock:BooksRepository.kt$BooksRepository${ }</ID>
+    <ID>NewLineAtEndOfFile:BookTest.kt$org.koenighotze.library.model.BookTest.kt</ID>
+    <ID>NewLineAtEndOfFile:WellKnownBooks.kt$org.koenighotze.library.WellKnownBooks.kt</ID>
+    <ID>UtilityClassWithPublicConstructor:WellKnownBooks.kt$WellKnownBooks</ID>
+    <ID>WildcardImport:Books.kt$import org.springframework.web.bind.annotation.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

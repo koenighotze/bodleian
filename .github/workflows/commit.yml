@@ -12,9 +12,6 @@ jobs:
           - name: Checking out
             uses: actions/checkout@v2
 
-          - name: Linting
-            run: mvn detekt:check -Ddetekt.config=config/detekt.yml
-
           - name: Running unit tests
             run: mvn -DexcludedGroups="integration" test
             

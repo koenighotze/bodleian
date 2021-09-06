@@ -9,40 +9,97 @@ on:
   workflow_dispatch:
 
 jobs:
-    build-container:
-      runs-on: ubuntu-20.04
+  qa:
+    runs-on: ubuntu-20.04
 
-      steps:
-          - name: Checking out
-            uses: actions/checkout@v2
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v2
 
-          - name: Building
-            run: |
-              mvn package
-              mvn jacoco:report
+      - name: Linting Kotlin
+        run: mvn detekt:check
 
-          - name: Uploading coverage
-            uses: codacy/codacy-coverage-reporter-action@v1
-            with:
-              api-token: ${{ secrets.CODACY_API_TOKEN }}
-              coverage-reports: ./target/site/jacoco/jacoco.xml
-            env:
-              CODACY_PROJECT_NAME: "bodleian"
-              CODACY_ORGANIZATION_PROVIDER: "gh"
-              CODACY_USERNAME: "${{ github.repository_owner }}"
+      - name: Reviewing markdown files
+        uses: reviewdog/action-markdownlint@v0.1
+        with:
+          reporter: github-check
+          github_token: ${{ secrets.github_token }}
+          level: warning
+          fail_on_error: true
 
-          - name: Containerizing
-            run: ./scripts/containerize.sh
-            env:
-              IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
-              DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
-              DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
+      - name: Detecting secrets
+        uses: reviewdog/action-detect-secrets@v0.6.0
+        with:
+          reporter: github-check
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: true
 
-    deploy:
-      needs:
-        - build-container
-      runs-on: ubuntu-20.04
+      - name: Reviewing shell files
+        uses: reviewdog/action-shellcheck@v1.7.0
+        with:
+          reporter: github-check
+          github_token: ${{ secrets.github_token }}
+          exclude: "./.git/*"
+          fail_on_error: true
 
-      steps:
-        - name: Deploying...
-          run: echo WIP...
+      - name: Reviewing Terraform files
+        uses: reviewdog/action-tflint@v1.13.0
+        with:
+          reporter: github-check
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: true
+
+      - name: Reviewing security of Terraform files
+        uses: reviewdog/action-tfsec@v1.11.0
+        with:
+          reporter: github-check
+          github_token: ${{ secrets.github_token }}
+          level: info
+          fail_on_error: true
+
+      - name: Reviewing yaml files
+        uses: reviewdog/action-yamllint@v1.4.0
+        with:
+          reporter: github-check
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: true
+
+
+  build-container:
+    runs-on: ubuntu-20.04
+
+    steps:
+        - name: Checking out
+          uses: actions/checkout@v2
+
+        - name: Building
+          run: |
+            mvn package
+            mvn jacoco:report
+
+        - name: Uploading coverage
+          uses: codacy/codacy-coverage-reporter-action@v1
+          with:
+            api-token: ${{ secrets.CODACY_API_TOKEN }}
+            coverage-reports: ./target/site/jacoco/jacoco.xml
+          env:
+            CODACY_PROJECT_NAME: "bodleian"
+            CODACY_ORGANIZATION_PROVIDER: "gh"
+            CODACY_USERNAME: "${{ github.repository_owner }}"
+
+        - name: Containerizing
+          run: ./scripts/containerize.sh
+          env:
+            IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
+            DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
+            DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
+
+  deploy:
+    needs:
+      - qa
+      - build-container
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Deploying...
+        run: echo WIP...
