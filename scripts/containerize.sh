@@ -30,7 +30,7 @@ fi
 
 if [[ "$GITHUB_REF" = "refs/heads/main" ]]; then
   # shellcheck disable=SC2086
-  mvn jib $JIB_OPTIONS
+  mvn jib:build $JIB_OPTIONS
 else
   echo "Not running on main branch, only building a tar and not pushing"
 
