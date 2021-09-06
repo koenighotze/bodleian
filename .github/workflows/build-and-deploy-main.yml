@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Linting Kotlin
-        run: mvn detekt:check
+        run: mvn detekt:check -Ddetekt.config=detekt.yml
 
       - name: Reviewing markdown files
         uses: reviewdog/action-markdownlint@v0.1
@@ -63,7 +63,6 @@ jobs:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
           fail_on_error: true
-
 
   build-container:
     runs-on: ubuntu-20.04
