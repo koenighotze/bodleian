@@ -38,6 +38,7 @@ jobs:
             id: tag
             run: |
               tag_name=${GITHUB_REF/refs\/tags\/}
+              tag_name=${tag_name/refs\/heads\/main}
               echo "::set-output name=name::${tag_name:=latest}"
 
           - name: Containerizing
