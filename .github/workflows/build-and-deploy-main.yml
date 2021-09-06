@@ -54,7 +54,7 @@ jobs:
 #              CONTAINER_LABELS: "org.opencontainers.image.revision=${{ github.sha }},org.opencontainers.image.created=${{ steps.date.outputs.now }}"
 #              CONTAINER_TAGS: "${{ steps.tag.outputs.name }}"
               DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
-              DOCKER_REGISTRY_PASSWORD: "${{ secrets.DOCKER_REGISTRY_PASSWORD }}"
+              DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
 
     deploy:
       needs:
