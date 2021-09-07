@@ -32,7 +32,7 @@ if [[ "$GITHUB_REF" = "refs/tags/" ]]; then
   # shellcheck disable=SC2086
   mvn jib:build $JIB_OPTIONS
 else
-  echo "Not running on main branch, only building a tar and not pushing"
+  echo "Not running on tag, only building a tar and not pushing"
 
   # shellcheck disable=SC2086
   mvn jib:buildTar $JIB_OPTIONS
