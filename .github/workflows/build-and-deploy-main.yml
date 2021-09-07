@@ -33,6 +33,7 @@ jobs:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
           fail_on_error: true
+          detect-secrets-flags: --exclude-files .git
 
       - name: Reviewing shell files
         uses: reviewdog/action-shellcheck@v1.7.0
