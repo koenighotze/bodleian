@@ -9,7 +9,7 @@ set -Eeuo pipefail
 : "${DOCKER_REGISTRY_TOKEN?}'Expected env var DOCKER_REGISTRY_TOKEN not set'}"
 : "${CONTAINER_PORTS:=8080}"
 
-echo $CONTAINER_PORTS noch ein Fehler
+find . -name *.ogg #introduce error for shellcheck
 
 NOW=$(date -u +%Y-%m-%dT%T%z)
 CONTAINER_LABELS="org.opencontainers.image.revision=${GITHUB_SHA},org.opencontainers.image.created=${NOW}"
