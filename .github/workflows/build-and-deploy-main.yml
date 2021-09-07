@@ -1,9 +1,9 @@
-name: Build and deploy main
+name: Build and deploy
 
 on:
   push:
     branches:
-      - main
+      - *
     tags:
       - v*
   workflow_dispatch:
@@ -65,7 +65,32 @@ jobs:
           github_token: ${{ secrets.github_token }}
           fail_on_error: true
 
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v2
+
+      - name: Testing
+        run: |
+          mvn test
+          mvn jacoco:report
+
+      - name: Uploading coverage
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: ./target/site/jacoco/jacoco.xml
+        env:
+          CODACY_PROJECT_NAME: "bodleian"
+          CODACY_ORGANIZATION_PROVIDER: "gh"
+          CODACY_USERNAME: "${{ github.repository_owner }}"
+
   build-container:
+    needs:
+      - qa
+      - test
     runs-on: ubuntu-20.04
 
     steps:
@@ -73,19 +98,7 @@ jobs:
           uses: actions/checkout@v2
 
         - name: Building
-          run: |
-            mvn package
-            mvn jacoco:report
-
-        - name: Uploading coverage
-          uses: codacy/codacy-coverage-reporter-action@v1
-          with:
-            api-token: ${{ secrets.CODACY_API_TOKEN }}
-            coverage-reports: ./target/site/jacoco/jacoco.xml
-          env:
-            CODACY_PROJECT_NAME: "bodleian"
-            CODACY_ORGANIZATION_PROVIDER: "gh"
-            CODACY_USERNAME: "${{ github.repository_owner }}"
+          run: mvn package
 
         - name: Containerizing
           run: ./scripts/containerize.sh
@@ -95,11 +108,11 @@ jobs:
             DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
 
   deploy:
+    if: startsWith(github.event.ref, 'refs/tags/v')
     needs:
-      - qa
       - build-container
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Deploying...
+      - name: Deploying
         run: echo WIP...
