@@ -16,6 +16,8 @@ if [[ "$GITHUB_REF" = "refs/tags/" ]]; then
 
   docker tag "$IMAGE_NAME" "$GCR_IMAGE_NAME"
   docker push "$GCR_IMAGE_NAME"
+
+  echo "::set-output name=image_name::$GCR_IMAGE_NAME"
 else
   echo "Not a tagged version, will not push to GCR"
 fi

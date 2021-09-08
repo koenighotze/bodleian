@@ -1,0 +1,63 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    client.knative.dev/user-image: eu.gcr.io/cloud-run-tutorial-324718/koenighotze/bodleian@sha256:c2e0271a12519d2ff73b7309bd059577e93cebed9a0747415ad4d28cd4840cbc
+    run.googleapis.com/client-name: cloud-console
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    serving.knative.dev/creator: david.schmitz.privat@gmail.com
+    serving.knative.dev/lastModifier: david.schmitz.privat@gmail.com
+  creationTimestamp: '2021-09-07T12:39:30.857843Z'
+  generation: 4
+  labels:
+    cloud.googleapis.com/location: europe-west1
+  name: bodleian
+  namespace: '116749197511'
+  resourceVersion: AAXLaDVnPNQ
+  selfLink: /apis/serving.knative.dev/v1/namespaces/116749197511/services/bodleian
+  uid: 205ecac5-0fbe-4935-aba7-3d7c754f2f88
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '1'
+        run.googleapis.com/client-name: cloud-console
+      name: bodleian-00001-beq
+    spec:
+      containerConcurrency: 80
+      containers:
+      - image: eu.gcr.io/cloud-run-tutorial-324718/koenighotze/bodleian@sha256:c2e0271a12519d2ff73b7309bd059577e93cebed9a0747415ad4d28cd4840cbc
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+      serviceAccountName: 116749197511-compute@developer.gserviceaccount.com
+      timeoutSeconds: 300
+  traffic:
+  - latestRevision: true
+    percent: 100
+status:
+  address:
+    url: https://bodleian-sc2ixl5vna-ew.a.run.app
+  conditions:
+  - lastTransitionTime: '2021-09-07T14:01:56.548820Z'
+    status: 'True'
+    type: Ready
+  - lastTransitionTime: '2021-09-07T12:41:24.503230Z'
+    status: 'True'
+    type: ConfigurationsReady
+  - lastTransitionTime: '2021-09-07T14:01:56.548820Z'
+    status: 'True'
+    type: RoutesReady
+  latestCreatedRevisionName: bodleian-00001-beq
+  latestReadyRevisionName: bodleian-00001-beq
+  observedGeneration: 4
+  traffic:
+  - latestRevision: true
+    percent: 100
+    revisionName: bodleian-00001-beq
+  url: https://bodleian-sc2ixl5vna-ew.a.run.app
