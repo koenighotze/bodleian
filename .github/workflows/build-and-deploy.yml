@@ -110,5 +110,17 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: Setting up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v.2.1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCR_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Pushing to GCR
+        run: ./scripts/push-to-gcr.sh
+        env:
+          GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
+
       - name: Deploying
-        run: echo WIP...
+        run: echo "WIP..."
