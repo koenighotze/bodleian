@@ -96,12 +96,19 @@ jobs:
         - name: Building
           run: mvn package
 
+        - name: Setting up Cloud SDK
+          uses: google-github-actions/setup-gcloud@v0.2.1
+          with:
+            project_id: "${{ secrets.GCP_PROJECT_ID }}"
+            service_account_key: "${{ secrets.GCR_SA_KEY }}"
+            export_default_credentials: true
+
         - name: Containerizing
           run: ./scripts/containerize.sh
           env:
             IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
-            DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
-            DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
+#            DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
+#            DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
 
   deploy:
     if: startsWith(github.event.ref, 'refs/tags/v')
@@ -120,17 +127,20 @@ jobs:
           service_account_key: "${{ secrets.GCR_SA_KEY }}"
           export_default_credentials: true
 
-      - name: Pushing to GCR
-        id: push
-        run: ./scripts/push-to-gcr.sh
-        env:
-          GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
+      - name: Getting current tag
+        id: info
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+#      - name: Pushing to GCR
+#        id: push
+#        run: ./scripts/push-to-gcr.sh
+#        env:
+#          GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
 
       - name: Deploying to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.6.0
         with:
-          image: "${{ steps.push.outputs.image_name }}"
+          image: "${{ github.repository }}:${{ steps.info.outputs.tag }}"
           service: "bodleian"
           region: "europe-west1"
 

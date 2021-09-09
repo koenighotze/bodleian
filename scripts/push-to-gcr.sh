@@ -7,6 +7,8 @@ set -Eeuo pipefail
 : "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
 : "${GCP_PROJECT_ID?'Expected env var GCP_PROJECT_ID not set'}"
 
+gcloud auth configure-docker
+
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   GIT_TAG=${GITHUB_REF/refs\/tags\/}
   IMAGE_NAME="$GITHUB_REPOSITORY:$GIT_TAG"
@@ -14,7 +16,6 @@ if [[ "$GITHUB_REF" = refs/tags/* ]]; then
 
   GCR_IMAGE_NAME="eu.gcr.io/${GCP_PROJECT_ID}/${IMAGE_NAME}"
 
-  gcloud auth configure-docker
   docker pull "$IMAGE_NAME"
   docker tag "$IMAGE_NAME" "$GCR_IMAGE_NAME"
   docker push "$GCR_IMAGE_NAME"
