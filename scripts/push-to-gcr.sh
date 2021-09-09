@@ -7,10 +7,6 @@ set -Eeuo pipefail
 : "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
 : "${GCP_PROJECT_ID?'Expected env var GCP_PROJECT_ID not set'}"
 
-env
-
-echo "REF==${GITHUB_REF}"
-
 IMAGE_NAME="$GITHUB_REPOSITORY:$GITHUB_SHA"
 echo "::group:: Pushing image ${IMAGE_NAME} to GCR"
 

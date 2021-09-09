@@ -28,7 +28,7 @@ if [[ -n "${GIT_TAG:=}" ]]; then
     JIB_OPTIONS="${JIB_OPTIONS} -Djib.to.tags=${GIT_TAG}"
 fi
 
-if [[ "$GITHUB_REF" = "refs/tags/" ]]; then
+if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
   mvn jib:build $JIB_OPTIONS
 else
