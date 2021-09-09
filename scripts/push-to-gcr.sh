@@ -7,12 +7,12 @@ set -Eeuo pipefail
 : "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
 : "${GCP_PROJECT_ID?'Expected env var GCP_PROJECT_ID not set'}"
 
-IMAGE_NAME="$GITHUB_REPOSITORY:$GITHUB_SHA"
-echo "::group:: Pushing image ${IMAGE_NAME} to GCR"
-
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   GIT_TAG=${GITHUB_REF/refs\/tags\/}
-  GCR_IMAGE_NAME="eu.gcr.io/${GCP_PROJECT_ID}/$GITHUB_REPOSITORY:${GIT_TAG}"
+  IMAGE_NAME="$GITHUB_REPOSITORY:$GIT_TAG"
+  echo "::group:: Pushing image ${IMAGE_NAME} to GCR"
+
+  GCR_IMAGE_NAME="eu.gcr.io/${GCP_PROJECT_ID}/${IMAGE_NAME}"
 
   docker tag "$IMAGE_NAME" "$GCR_IMAGE_NAME"
   docker push "$GCR_IMAGE_NAME"
