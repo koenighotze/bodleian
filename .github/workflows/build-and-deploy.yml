@@ -139,5 +139,6 @@ jobs:
           service: "bodleian"
           region: "europe-west1"
 
-      - name: Use Output
-        run: curl "${{ steps.deploy.outputs.url }}"
+      - name: Check if service is up
+        run: |
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
