@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  GCP_PROJECT_ID:
+
 jobs:
   qa:
     runs-on: ubuntu-20.04
@@ -106,6 +109,7 @@ jobs:
         - name: Containerizing
           run: ./scripts/containerize.sh
           env:
+            GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
             IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
 #            DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
 #            DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
