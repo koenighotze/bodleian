@@ -9,8 +9,9 @@ set -Eeuo pipefail
 #: "${DOCKER_REGISTRY_USERNAME?}'Expected env var DOCKER_REGISTRY_USERNAME not set'}"
 #: "${DOCKER_REGISTRY_TOKEN?}'Expected env var DOCKER_REGISTRY_TOKEN not set'}"
 : "${CONTAINER_PORTS:=8080}"
+: "${TARGET_REGISTRY:=eu.gcr.io/$GCP_PROJECT_ID}"
 
-gcloud auth configure-docker
+gcloud auth configure-docker "${TARGET_REGISTRY}"
 
 NOW=$(date -u +%Y-%m-%dT%T%z)
 CONTAINER_LABELS="org.opencontainers.image.revision=${GITHUB_SHA},org.opencontainers.image.created=${NOW}"
@@ -22,7 +23,7 @@ fi
 echo "::group:: Building image ${IMAGE_NAME}"
 
 JIB_OPTIONS="-Djib.container.labels=${CONTAINER_LABELS}
-    -Djib.to.image=eu.gcr.io/${GCP_PROJECT_ID}/${IMAGE_NAME}
+    -Djib.to.image=${TARGET_REGISTRY}/${IMAGE_NAME}
     -Djib.container.ports=${CONTAINER_PORTS}"
 #    -Djib.to.auth.username=${DOCKER_REGISTRY_USERNAME}
 #    -Djib.to.auth.password=${DOCKER_REGISTRY_TOKEN}"
