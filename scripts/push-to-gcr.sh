@@ -14,6 +14,7 @@ if [[ "$GITHUB_REF" = refs/tags/* ]]; then
 
   GCR_IMAGE_NAME="eu.gcr.io/${GCP_PROJECT_ID}/${IMAGE_NAME}"
 
+  gcloud auth configure-docker
   docker pull "$IMAGE_NAME"
   docker tag "$IMAGE_NAME" "$GCR_IMAGE_NAME"
   docker push "$GCR_IMAGE_NAME"
