@@ -133,7 +133,6 @@ jobs:
           image: "${{ steps.push.outputs.image_name }}"
           service: "bodleian"
           region: "europe-west1"
-#          credentials: "${{ secrets.GCR_SA_KEY }}"
 
       - name: Use Output
         run: curl "${{ steps.deploy.outputs.url }}"
