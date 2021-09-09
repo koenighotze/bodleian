@@ -135,7 +135,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.6.0
         with:
-          image: "{{ env.TARGET_REGISTRY }}/${{ github.repository }}:${{ steps.info.outputs.tag }}"
+          image: "${{ env.TARGET_REGISTRY }}/${{ github.repository }}:${{ steps.info.outputs.tag }}"
           service: "bodleian"
           region: "europe-west1"
 
