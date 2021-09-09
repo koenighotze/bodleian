@@ -5,7 +5,8 @@ on:
   workflow_dispatch:
 
 env:
-  GCP_PROJECT_ID:
+  TARGET_REGISTRY: "eu.gcr.io/${{ secrets.GCP_PROJECT_ID }}"
+  GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
 
 jobs:
   qa:
@@ -108,11 +109,6 @@ jobs:
 
         - name: Containerizing
           run: ./scripts/containerize.sh
-          env:
-            GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
-            IMAGE_NAME: "${{ github.repository }}:${{ github.sha }}"
-#            DOCKER_REGISTRY_USERNAME: "${{ secrets.DOCKER_REGISTRY_USERNAME }}"
-#            DOCKER_REGISTRY_TOKEN: "${{ secrets.DOCKER_REGISTRY_TOKEN }}"
 
   deploy:
     if: startsWith(github.event.ref, 'refs/tags/v')
@@ -134,17 +130,12 @@ jobs:
       - name: Getting current tag
         id: info
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-#      - name: Pushing to GCR
-#        id: push
-#        run: ./scripts/push-to-gcr.sh
-#        env:
-#          GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
 
       - name: Deploying to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.6.0
         with:
-          image: "${{ github.repository }}:${{ steps.info.outputs.tag }}"
+          image: "$TARGET_REGISTRY/${{ github.repository }}:${{ steps.info.outputs.tag }}"
           service: "bodleian"
           region: "europe-west1"
 

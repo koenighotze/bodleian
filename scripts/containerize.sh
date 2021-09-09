@@ -2,14 +2,12 @@
 
 set -Eeuo pipefail
 
-: "${IMAGE_NAME?'Expected env var IMAGE_NAME not set'}"
 : "${GITHUB_SHA?'Expected env var GITHUB_SHA not set'}"
 : "${GITHUB_REF?'Expected env var GITHUB_REF not set'}"
-: "${GCP_PROJECT_ID?'Expected env var GCP_PROJECT_ID not set'}"
-#: "${DOCKER_REGISTRY_USERNAME?}'Expected env var DOCKER_REGISTRY_USERNAME not set'}"
-#: "${DOCKER_REGISTRY_TOKEN?}'Expected env var DOCKER_REGISTRY_TOKEN not set'}"
+: "${TARGET_REGISTRY?'Expected env var TARGET_REGISTRY not set'}"
 : "${CONTAINER_PORTS:=8080}"
-: "${TARGET_REGISTRY:=eu.gcr.io/$GCP_PROJECT_ID}"
+
+IMAGE_NAME="$TARGET_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
 
 gcloud auth configure-docker "${TARGET_REGISTRY}"
 
@@ -23,10 +21,8 @@ fi
 echo "::group:: Building image ${IMAGE_NAME}"
 
 JIB_OPTIONS="-Djib.container.labels=${CONTAINER_LABELS}
-    -Djib.to.image=${TARGET_REGISTRY}/${IMAGE_NAME}
+    -Djib.to.image=${IMAGE_NAME}
     -Djib.container.ports=${CONTAINER_PORTS}"
-#    -Djib.to.auth.username=${DOCKER_REGISTRY_USERNAME}
-#    -Djib.to.auth.password=${DOCKER_REGISTRY_TOKEN}"
 
 if [[ -n "${GIT_TAG:=}" ]]; then
     JIB_OPTIONS="${JIB_OPTIONS} -Djib.to.tags=${GIT_TAG}"
