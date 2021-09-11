@@ -20,12 +20,12 @@ fi
 
 echo "::group:: Building image ${IMAGE_NAME}"
 
-JIB_OPTIONS="-Djib.container.labels=${CONTAINER_LABELS}
-    -Djib.to.image=${IMAGE_NAME}
-    -Djib.container.ports=${CONTAINER_PORTS}"
+JIB_OPTIONS="-Djib.container.labels=$CONTAINER_LABELS
+    -Djib.to.image=$IMAGE_NAME
+    -Djib.container.ports=$CONTAINER_PORTS"
 
 if [[ -n "${GIT_TAG:=}" ]]; then
-    JIB_OPTIONS="${JIB_OPTIONS} -Djib.to.tags=${GIT_TAG}"
+    JIB_OPTIONS="$JIB_OPTIONS -Djib.to.tags=$GIT_TAG"
 fi
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
