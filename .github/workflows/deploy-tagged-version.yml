@@ -2,8 +2,6 @@ name: Deploy tagged version
 
 on:
   push:
-    branches:
-      - "!*"
     tags:
       - "v*"
   workflow_dispatch:
