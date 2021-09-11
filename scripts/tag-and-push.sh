@@ -7,7 +7,7 @@ set -Eeuo pipefail
 : "${TARGET_REGISTRY?'Expected env var TARGET_REGISTRY not set'}"
 : "${CONTAINER_PORTS:=8080}"
 
-gcloud auth configure-docker "${TARGET_REGISTRY}"
+gcloud auth configure-docker eu.gcr.io
 
 GIT_TAG=${GITHUB_REF/refs\/tags\/}
 IMAGE_NAME="$TARGET_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"

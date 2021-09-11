@@ -9,7 +9,7 @@ set -Eeuo pipefail
 
 IMAGE_NAME="$TARGET_REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA"
 
-gcloud auth configure-docker "${TARGET_REGISTRY}"
+gcloud auth configure-docker eu.gcr.io
 
 NOW=$(date -u +%Y-%m-%dT%T%z)
 CONTAINER_LABELS="org.opencontainers.image.revision=${GITHUB_SHA},org.opencontainers.image.created=${NOW}"
@@ -31,6 +31,7 @@ fi
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
   mvn jib:build $JIB_OPTIONS
+  echo "::set-output name=image-name::$TARGET_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG}"
 else
   echo "Not running on tag, only building a tar and not pushing"
 

@@ -29,15 +29,15 @@ jobs:
           service_account_key: "${{ secrets.GCR_SA_KEY }}"
           export_default_credentials: true
 
-      - name: Tagging and pushing
-        id: tagandpush
-        run: ./scripts/tag-and-push.sh
+      - name: Containerizing
+        id: containerizing
+        run: ./scripts/containerize.sh
 
       - name: Deploying to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.6.0
         with:
-          image: "${{ env.TARGET_REGISTRY }}/${{ github.repository }}:${{ github.event.inputs.tag || steps.tagandpush.outputs.image-name }}"
+          image: "${{ env.TARGET_REGISTRY }}/${{ github.repository }}:${{ github.event.inputs.tag || steps.containerizing.outputs.image-name }}"
           service: "bodleian"
           region: "europe-west1"
 
