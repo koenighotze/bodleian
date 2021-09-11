@@ -16,8 +16,6 @@ env:
 
 jobs:
   deploy:
-    needs:
-      - build-container
     runs-on: ubuntu-20.04
 
     steps:
