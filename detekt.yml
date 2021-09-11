@@ -321,8 +321,7 @@ formatting:
     active: true
     autoCorrect: true
   NoEmptyClassBody:
-    active: true
-    autoCorrect: true
+    active: false
   NoEmptyFirstLineInMethodBlock:
     active: false
     autoCorrect: true

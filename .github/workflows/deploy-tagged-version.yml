@@ -1,0 +1,51 @@
+name: Deploy tagged version
+
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: "The name of the tag that should be deployed, e.g., v1.0.0"
+
+env:
+  TARGET_REGISTRY: "eu.gcr.io/${{ secrets.GCP_PROJECT_ID }}"
+  GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
+
+jobs:
+  deploy:
+    needs:
+      - build-container
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v2
+
+      - name: Setting up GCP environment
+        uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          project_id: "${{ secrets.GCP_PROJECT_ID }}"
+          service_account_key: "${{ secrets.GCR_SA_KEY }}"
+          export_default_credentials: true
+
+      - name: Getting current tag
+        id: info
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Deploying to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0.6.0
+        with:
+          image: "${{ env.TARGET_REGISTRY }}/${{ github.repository }}:${{ github.event.inputs.tag || steps.info.outputs.tag }}"
+          service: "bodleian"
+          region: "europe-west1"
+
+      - name: Check if service is up
+        run: |
+          gcloud run services describe bodleian --region europe-west1
+          curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
