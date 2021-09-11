@@ -28,7 +28,7 @@ if [[ -n "${GIT_TAG:=}" ]]; then
     JIB_OPTIONS="$JIB_OPTIONS -Djib.to.tags=$GIT_TAG"
 fi
 
-mvn clean test compile
+mvn clean compile
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
