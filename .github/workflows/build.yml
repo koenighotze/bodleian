@@ -100,9 +100,6 @@ jobs:
         - name: Checking out
           uses: actions/checkout@v2
 
-        - name: Building
-          run: mvn package
-
         - name: Setting up GCP environment
           uses: google-github-actions/setup-gcloud@v0.2.1
           with:
