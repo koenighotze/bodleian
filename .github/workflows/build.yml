@@ -3,7 +3,9 @@ name: Build and deploy
 on:
   push:
     branches:
-      - "*"
+      - main
+      # Push events to branches matching refs/heads/mona/octocat
+      - 'feature/*'
   workflow_dispatch:
 
 env:
