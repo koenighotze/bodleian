@@ -6,9 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
     inputs:
-      tag:
+      image-name:
         required: true
-        description: "The name of the tag that should be deployed, e.g., v1.0.0"
+        description: "The name of the image that should be deployed, e.g., eu.gcr.io/<projectid>/koenighotze/bodleian:v0.0.25"
 
 env:
   TARGET_REGISTRY: "eu.gcr.io/${{ secrets.GCP_PROJECT_ID }}"
@@ -37,7 +37,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.6.0
         with:
-          image: "${{ env.TARGET_REGISTRY }}/${{ github.repository }}:${{ github.event.inputs.tag || steps.containerizing.outputs.image-name }}"
+          image: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
           service: "bodleian"
           region: "europe-west1"
 

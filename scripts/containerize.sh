@@ -16,6 +16,7 @@ CONTAINER_LABELS="org.opencontainers.image.revision=${GITHUB_SHA},org.opencontai
 
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
     GIT_TAG=${GITHUB_REF/refs\/tags\/}
+    echo "::set-output name=git-tag::$GIT_TAG"
 fi
 
 echo "::group:: Building image ${IMAGE_NAME}"
@@ -33,7 +34,7 @@ mvn clean compile
 if [[ "$GITHUB_REF" = refs/tags/* ]]; then
   # shellcheck disable=SC2086
   mvn jib:build $JIB_OPTIONS
-  echo "::set-output name=image-name::$TARGET_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG}"
+  echo "::set-output name=image-name::$TARGET_REGISTRY/$GITHUB_REPOSITORY:$GIT_TAG"
 else
   echo "Not running on tag, only building a tar and not pushing"
 
