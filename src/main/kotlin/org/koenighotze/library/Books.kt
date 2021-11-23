@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 
@@ -21,7 +20,6 @@ class Books(val repo: BooksRepository) {
     @GetMapping
     fun allBooks(): List<Book> = repo.findAll()
 
-    // TODO return 404 on Nil
     @GetMapping("/{id}")
     fun book(@PathVariable id: String): ResponseEntity<Book> =
         repo.findById(id)
