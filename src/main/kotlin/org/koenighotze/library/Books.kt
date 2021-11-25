@@ -28,14 +28,13 @@ class Books(val repo: BooksRepository) {
 
     @DeleteMapping("/{id}")
     @Suppress("SwallowedException")
-    fun delete(@PathVariable id: String): ResponseEntity<Unit> {
+    fun delete(@PathVariable id: String): ResponseEntity<Unit> =
         try {
             repo.deleteById(id)
-            return ResponseEntity(OK)
+            ResponseEntity(OK)
         } catch (e: EmptyResultDataAccessException) {
-            return ResponseEntity(NOT_FOUND)
+            ResponseEntity(NOT_FOUND)
         }
-    }
 
     @PostMapping("/{id}")
     fun add(@PathVariable id: String, @RequestBody book: Book) = repo.save(book.copy(id = id))
