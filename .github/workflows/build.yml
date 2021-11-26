@@ -23,7 +23,7 @@ jobs:
         run: mvn detekt:check -Ddetekt.config=detekt.yml
 
       - name: Reviewing markdown files
-        uses: reviewdog/action-markdownlint@v0.1
+        uses: reviewdog/action-markdownlint@v0.3
         with:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
