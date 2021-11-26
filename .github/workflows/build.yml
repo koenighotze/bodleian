@@ -39,7 +39,7 @@ jobs:
           detect_secrets_flags: --exclude-files .git
 
       - name: Reviewing shell files
-        uses: reviewdog/action-shellcheck@v1.7.0
+        uses: reviewdog/action-shellcheck@v1.12
         with:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
