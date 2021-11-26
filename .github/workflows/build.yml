@@ -31,7 +31,7 @@ jobs:
           fail_on_error: true
 
       - name: Detecting secrets
-        uses: reviewdog/action-detect-secrets@v0.6.0
+        uses: reviewdog/action-detect-secrets@v0.6.2
         with:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
