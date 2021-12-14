@@ -23,12 +23,10 @@ jobs:
         run: mvn detekt:check -Ddetekt.config=detekt.yml
 
       - name: Reviewing markdown files
-        uses: reviewdog/action-markdownlint@v0.3
+        uses: reviewdog/action-remark-lint@v5.1.1
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-check
-          github_token: ${{ secrets.github_token }}
-          level: warning
-          fail_on_error: true
 
       - name: Detecting secrets
         uses: reviewdog/action-detect-secrets@v0.6.3
