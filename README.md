@@ -8,5 +8,5 @@
 
 This is the Bodleian backend service, deployed to Google Cloud Run.
 
- - See infrastructure [here](https://github.com/koenighotze/bodleian-infrastructure).
- - Frontend is [here](https://github.com/koenighotze/bodleian-frontend)
+-  See infrastructure [here](https://github.com/koenighotze/bodleian-infrastructure).
+-  Frontend is [here](https://github.com/koenighotze/bodleian-frontend)
