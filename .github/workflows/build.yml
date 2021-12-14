@@ -22,12 +22,6 @@ jobs:
       - name: Linting Kotlin
         run: mvn detekt:check -Ddetekt.config=detekt.yml
 
-      - name: Reviewing markdown files
-        uses: reviewdog/action-remark-lint@v5.1.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-check
-          fail_on_error: true
 
       - name: Detecting secrets
         uses: reviewdog/action-detect-secrets@v0.6.3
