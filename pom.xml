@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>org.koenighotze</groupId>
-	<artifactId>library</artifactId>
+	<artifactId>bodleian</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Service for book and other media catalog</name>
 	<properties>

@@ -33,6 +33,16 @@ jobs:
         id: containerizing
         run: ./scripts/containerize.sh
 
+      - name: Scaning image
+        uses: aquasecurity/trivy-action@v0.2.0
+        with:
+          image-ref: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: "MEDIUM,HIGH,CRITICAL"
+
       - name: Deploying to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.6.0

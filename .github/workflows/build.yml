@@ -19,9 +19,18 @@ jobs:
       - name: Checking out
         uses: actions/checkout@v2
 
+      - name: Scaning code
+        uses: aquasecurity/trivy-action@v0.0.2
+        with:
+          scan-type: "fs"
+          ignore-unfixed: true
+          format: "table"
+          template: "@/contrib/sarif.tpl"
+#          output: 'trivy-results.sarif'
+          severity: "MEDIUM,HIGH,CRITICAL"
+
       - name: Linting Kotlin
         run: mvn detekt:check -Ddetekt.config=detekt.yml
-
 
       - name: Detecting secrets
         uses: reviewdog/action-detect-secrets@v0.6.3
@@ -101,4 +110,17 @@ jobs:
             export_default_credentials: true
 
         - name: Containerizing
+          id: containerizing
           run: ./scripts/containerize.sh
+
+        - name: Scaning image tar
+          uses: aquasecurity/trivy-action@v0.2.0
+          with:
+            image: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
+            format: "table"
+            exit-code: "1"
+            ignore-unfixed: true
+            severity: "MEDIUM,HIGH,CRITICAL"
+            vuln-type: "os,library"
+
+
