@@ -1,13 +1,14 @@
+name: Notify slack
+
 on:
   workflow_run:
     workflows: ["Build main or features", "Deploy tagged version"]
     types: [completed]
 
 jobs:
-  on-completion:
-#  on-failure:
+  on-failure:
     runs-on: ubuntu-latest
-#    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Slack Notify
         uses: rtCamp/action-slack-notify@v2.2.0
@@ -16,6 +17,5 @@ jobs:
           SLACK_USERNAME: Bodleian
           SLACK_COLOR: "${{ job.status }}"
           SLACK_TITLE: "A workflow completed"
-          SLACK_MESSAGE: "And it was a ${{ github.event.workflow_run.conclusion}}"
           SLACK_FOOTER: "Best regards from Bodleian"
           MSG_MINIMAL: actions url

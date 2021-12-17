@@ -55,3 +55,14 @@ jobs:
         run: |
           gcloud run services describe bodleian --region europe-west1
           curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" "${{ steps.deploy.outputs.url }}/actuator/health"
+
+      - name: Slack Notify
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: Bodleian
+          SLACK_COLOR: "${{ job.status }}"
+          SLACK_TITLE: "Deployment"
+          SLACK_MESSAGE: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }} was deployed. Check it at ${{ steps.deploy.outputs.url }}"
+          SLACK_FOOTER: "Best regards from Bodleian"
+          MSG_MINIMAL: actions url
