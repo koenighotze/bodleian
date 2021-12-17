@@ -21,9 +21,8 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: Bodleian
-          SLACK_ICON_EMOJI: ":book:"
           SLACK_COLOR: "${{ job.status }}"
           SLACK_TITLE: "A workflow completed"
-#          SLACK_MESSAGE: ""
-          SLACK_FOOTER: "Best regards from Bodleian"
+          SLACK_MESSAGE: "And it was a ${{ github.event.workflow_run.conclusion}}"
+#          SLACK_FOOTER: "Best regards from Bodleian"
           MSG_MINIMAL: actions url
