@@ -94,6 +94,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>io.kotest.extensions</groupId>
+			<artifactId>kotest-extensions-spring</artifactId>
+			<version>1.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf-spring5</artifactId>
 			<version>3.0.13.RELEASE</version>
@@ -137,6 +143,9 @@
 				<groupId>com.github.ozsie</groupId>
 				<artifactId>detekt-maven-plugin</artifactId>
 				<version>1.19.1</version>
+				<configuration>
+					<config>detekt.yml</config>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>verify</phase>

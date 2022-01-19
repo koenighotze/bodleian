@@ -1,24 +1,23 @@
 package org.koenighotze.library
 
-import org.junit.jupiter.api.DisplayName
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.ints.shouldBeGreaterThan
+import io.kotest.matchers.shouldNotBe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Tag
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import strikt.api.expectThat
-import strikt.assertions.isGreaterThan
-import strikt.assertions.isNotNull
 
-@DisplayName("The DbLoader")
 @SpringBootTest
 @Tag("integration")
-internal class DbLoaderTest(@Autowired val repository: BooksRepository, @Autowired val dbLoader: DbLoader) {
-    @Test
-    fun `should load books into the database`() {
-        val books = repository.findAll()
+internal class DbLoaderTest(@Autowired val repository: BooksRepository, @Autowired val dbLoader: DbLoader): WordSpec({
+    "The DBLoader" should {
+        "load the books into the repository" {
+            val books = withContext(Dispatchers.IO) { repository.findAll() }
 
-        // Smoke test
-        expectThat(books.size).isGreaterThan(2)
-        expectThat(books.find { it.title == ("Release IT!") }).isNotNull()
+            books.size shouldBeGreaterThan 2
+            books.find { it.title == ("Release IT!") } shouldNotBe null
+        }
     }
-}
+})
