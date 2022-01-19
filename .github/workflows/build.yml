@@ -33,7 +33,7 @@ jobs:
         run: mvn detekt:check -Ddetekt.config=detekt.yml
 
       - name: Detecting secrets
-        uses: reviewdog/action-detect-secrets@v0.6.3
+        uses: reviewdog/action-detect-secrets@v0.7
         with:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
