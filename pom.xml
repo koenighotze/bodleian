@@ -84,13 +84,19 @@
 		<dependency>
 			<groupId>io.kotest</groupId>
 			<artifactId>kotest-runner-junit5-jvm</artifactId>
-			<version>5.0.2</version>
+			<version>5.1.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.kotest</groupId>
 			<artifactId>kotest-assertions-core-jvm</artifactId>
-			<version>5.0.2</version>
+			<version>5.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.kotest.extensions</groupId>
+			<artifactId>kotest-extensions-spring</artifactId>
+			<version>1.1.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -137,6 +143,9 @@
 				<groupId>com.github.ozsie</groupId>
 				<artifactId>detekt-maven-plugin</artifactId>
 				<version>1.19.1</version>
+				<configuration>
+					<config>detekt.yml</config>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>verify</phase>

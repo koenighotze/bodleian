@@ -1,20 +1,16 @@
 package org.koenighotze.library.model
 
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
-@DisplayName("A Book")
-class BookTest {
-    @Nested
-    @DisplayName("when constructing")
-    inner class WhenConstructing {
-        @Test
-        fun `should allow the isbn to be optional`() {
-            val book = Book(id = "123", title = "foo", author = "bar", isbn = null)
+class BookTest : WordSpec({
+    "A Book" When {
+        "constructed" should {
+            "allow the ISBN to be optional" {
+                val book = Book(id = "123", title = "foo", author = "bar", isbn = null)
 
-            assertNull(book.isbn)
+                book.isbn shouldBe null
+            }
         }
     }
-}
+})
