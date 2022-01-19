@@ -17,12 +17,15 @@ import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 
 @SpringBootTest(
-    classes = [ LibraryApplication::class ],
+    classes = [LibraryApplication::class],
     webEnvironment = RANDOM_PORT
 )
 @DisplayName("The Books REST endpoint")
 @IntegrationTestTag
-class BooksIntegrationTest(@Autowired val template: TestRestTemplate, @Autowired val repo: BooksRepository): BehaviorSpec({
+class BooksIntegrationTest(
+    @Autowired val template: TestRestTemplate,
+    @Autowired val repo: BooksRepository
+) : BehaviorSpec({
     beforeTest {
         withContext(Dispatchers.IO) {
             repo.saveAll(WellKnownBooks.books)
