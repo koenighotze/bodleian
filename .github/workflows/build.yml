@@ -56,7 +56,7 @@ jobs:
           fail_on_error: true
 
       - name: Reviewing security of Terraform files
-        uses: reviewdog/action-tfsec@v1.12.1
+        uses: reviewdog/action-tfsec@v1.13
         with:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
