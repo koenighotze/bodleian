@@ -1,4 +1,4 @@
-name: Build main or features
+name: Build
 
 on:
   push:
@@ -114,7 +114,7 @@ jobs:
       - name: Scaning image tar
         uses: aquasecurity/trivy-action@0.2.1
         with:
-          image: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
+          image-ref: "${{ github.event.inputs.image-name || steps.containerizing.outputs.image-name }}"
           format: "table"
           exit-code: "1"
           ignore-unfixed: true
