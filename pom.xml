@@ -78,7 +78,7 @@
         <dependency>
             <groupId>io.strikt</groupId>
             <artifactId>strikt-core</artifactId>
-            <version>0.33.0</version>
+            <version>0.34.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring5</artifactId>
-            <version>3.0.14.RELEASE</version>
+            <version>3.0.15.RELEASE</version>
         </dependency>
     </dependencies>
 
