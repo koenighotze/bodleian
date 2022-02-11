@@ -47,7 +47,7 @@ jobs:
           fail_on_error: true
 
       - name: Reviewing Terraform files
-        uses: reviewdog/action-tflint@v1.14
+        uses: reviewdog/action-tflint@v1.15
         with:
           reporter: github-check
           github_token: ${{ secrets.github_token }}
